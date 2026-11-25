@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#121212">
+<title>WilFit</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121212'/%3E%3Cpath d='M7 22V10l5 8 4-8 4 8 5-8v12' fill='none' stroke='%231DB954' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#121212;--card:#181818;--el:#282828;--g:#1DB954;--mu:#B3B3B3;--red:#F3727F}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden}
+body{background:var(--bg);color:#fff;font-family:Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh;-webkit-tap-highlight-color:transparent}
+body.lock{overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,select{font:inherit;font-size:16px;width:100%;background:var(--el);color:#fff;border:0;border-radius:8px;padding:12px;outline:0}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--g)}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px calc(96px + env(safe-area-inset-bottom))}
+.login{max-width:420px;margin:0 auto;padding:40px 20px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.logo{font-size:24px;font-weight:800}.logo span{color:var(--g)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+.chip{background:var(--el);border-radius:500px;padding:6px 12px;font-size:12px;color:var(--mu);max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+h1{font-size:26px;font-weight:700}h2{font-size:20px;font-weight:700}h3{font-size:16px;font-weight:700;margin:16px 0 6px}
+.mu{color:var(--mu);font-size:13px}
+.lab{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--g);font-weight:700}
+.lbl{display:block;font-size:12px;color:var(--mu);margin:0 0 4px}
+.err{color:var(--red);font-size:13px;min-height:18px;margin:8px 0}
+.ok{color:var(--g);font-size:13px;margin:8px 0}
+.card{background:var(--card);border-radius:8px;padding:14px;margin-top:12px}
+.row{display:flex;align-items:center;gap:10px}.sp{justify-content:space-between}
+.g3{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:8px;margin-top:10px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.g3s{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:var(--card);border-radius:8px;padding:12px 6px;text-align:center}.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--mu)}
+.btn{height:44px;padding:0 18px;border-radius:500px;background:var(--el);font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn.pri{background:var(--g);color:#000}.btn.dng{color:var(--red)}.w{width:100%}
+.btn:disabled{opacity:.6;cursor:default}
+.ib{width:34px;height:34px;border-radius:50%;background:var(--el);flex-shrink:0;font-size:14px}
+.ib:disabled{opacity:.3;cursor:default}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pill{background:var(--el);border-radius:500px;padding:7px 14px;font-size:13px;white-space:nowrap}
+.pill.on{background:var(--g);color:#000;font-weight:600}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--el);border-radius:500px;padding:4px;margin:16px 0}
+.tabs button{height:38px;border-radius:500px;font-weight:700;color:var(--mu)}
+.tabs button.on{background:var(--g);color:#000}
+.tag{display:inline-block;background:var(--el);border-radius:500px;padding:5px 12px;font-size:12px;color:var(--mu);margin:0 6px 6px 0}
+.bar{height:6px;background:var(--el);border-radius:500px;overflow:hidden;margin:10px 0}.bar i{display:block;height:100%;background:var(--g);transition:width .3s}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:14px 0}
+.dy{background:var(--card);border-radius:8px;padding:8px 0;font-size:12px;color:var(--mu);text-align:center}
+.dy b{display:block;color:#fff;font-size:15px;margin-top:2px}
+.dy.on{outline:2px solid var(--g)}
+.dy.hj b{color:var(--g)}
+.dy i{display:block;width:5px;height:5px;border-radius:50%;margin:4px auto 0}.dy i.dt{background:var(--g)}
+.ex{padding:12px 0;border-top:1px solid var(--el)}.ex:first-child{border-top:0}
+.ser{width:38px;height:38px;border-radius:50%;background:var(--el);color:var(--mu);font-weight:700;font-size:13px;flex-shrink:0}
+.ser.on{background:var(--g);color:#000}
+.sers{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tag-done{color:var(--g);font-size:12px;font-weight:700}
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--el);display:grid;grid-template-columns:repeat(5,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom)}
+.nav button{padding:12px 0;font-size:12px;color:var(--mu)}
+.nav button.on{color:var(--g);font-weight:700}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--card);width:100%;max-width:720px;max-height:88vh;max-height:88dvh;overflow:auto;-webkit-overflow-scrolling:touch;border-radius:16px 16px 0 0;padding:16px 16px 28px}
+.anim{width:100%;max-width:240px;height:170px;margin:0 auto;display:block}
+.arm{transform-origin:100px 58px;animation:mv 2s ease-in-out infinite}
+@keyframes mv{0%,100%{transform:rotate(-45deg)}50%{transform:rotate(45deg)}}
+@media (prefers-reduced-motion:reduce){.arm{animation:none}}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--el);padding:12px 18px;border-radius:500px;font-size:14px;z-index:200;max-width:90vw}
+ol.steps{padding-left:20px;font-size:14px;line-height:1.6;color:#ddd}
+#rest{position:sticky;top:8px;z-index:25}
+.rest{background:var(--g);color:#000;padding:8px 8px 8px 18px;border-radius:500px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.5);margin:8px 0}
+.rest b{font-size:24px;font-variant-numeric:tabular-nums}
+.rest .btn{height:32px;padding:0 14px;font-size:12px;background:#000;color:#fff}
+.net{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;margin:10px 0;background:var(--card);line-height:1.35}
+.net .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;background:var(--mu)}
+.net.ok .dot{background:var(--g)}.net.off .dot,.net.srv .dot,.net.tbl .dot{background:var(--red)}
+.net span{flex:1;min-width:0}
+.net button{background:var(--el);border-radius:500px;padding:6px 12px;font-size:12px;font-weight:700;flex-shrink:0}
+.foto{display:block;width:100%;max-height:320px;object-fit:contain;border-radius:12px;background:var(--el);margin:12px auto}
+.th{width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--el);flex-shrink:0}
+.lk{font-size:12px;color:var(--mu);text-decoration:underline;margin:18px auto 0;display:block;padding:8px}
+.st{display:inline-block;border-radius:500px;padding:3px 10px;font-size:11px;font-weight:700;background:var(--el);color:var(--mu)}
+.st.ok{background:var(--g);color:#000}.st.no{background:var(--red);color:#000}
+.fatal{position:fixed;left:12px;right:12px;top:12px;z-index:300;background:var(--red);color:#000;padding:12px 16px;border-radius:12px;font-size:14px;font-weight:600}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<noscript><p style="padding:24px;color:#fff">O WilFit precisa de JavaScript ativado.</p></noscript>
+<script>
+"use strict";
+/* ---------- Utilidades ---------- */
+const $=s=>document.querySelector(s);
+const pad=n=>String(n).padStart(2,"0");
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const isoLocal=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+
+/* Armazenamento local protegido (cache): se o navegador bloquear, o app segue em memória */
+const store={
+  get(k){try{return window.localStorage.getItem(k)}catch(e){return null}},
+  set(k,v){try{window.localStorage.setItem(k,v)}catch(e){}}
+};
+
+/* Aviso amigável em vez de tela branca */
+window.addEventListener("error",()=>{
+  if(document.querySelector(".fatal"))return;
+  const d=document.createElement("div");d.className="fatal";
+  d.innerHTML='Algo deu errado. <button style="text-decoration:underline;font-weight:700" onclick="location.reload()">Recarregar</button>';
+  document.body.appendChild(d);
+});
+
+/* ---------- Supabase (chaves públicas: a segurança vem das políticas RLS) ---------- */
+const SB_URL="https://hvbtrknxhxtulnlcymoh.supabase.co";
+const SB_PUB="sb_publishable__j3v0LqHbwbxzH9esvs1wA_S5bstcT9";
+let SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2YnRya254aHh0dWxubGN5bW9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1MTAwMDIsImV4cCI6MjExMDA4NjAwMn0.9hJ7cZ7hutNgTv4vlpwzg5Nk0i6xlHWDVuQ69AmZgvU";
+
+/* ---------- Constantes ---------- */
+const DN=["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"];
+const GR=["Peito","Costas","Ombros","Bíceps","Tríceps","Antebraço","Trapézio","Pernas","Glúteos","Panturrilha","Abdômen","Cardio/Funcional"];
+const GD={Peito:"Escápulas firmes, punhos alinhados e controle na descida.",Costas:"Peito aberto, ombros longe das orelhas e puxe com as costas.",Ombros:"Evite balançar o tronco; suba a carga só com técnica limpa.",Bíceps:"Cotovelos fixos ao lado do corpo, sem impulso.",Tríceps:"Cotovelos estáveis e extensão completa sem travar.",Antebraço:"Apoie o antebraço, use carga leve e amplitude completa.",Trapézio:"Suba os ombros em linha reta e desça devagar.",Pernas:"Joelhos alinhados com os pés, coluna neutra e abdômen firme.",Glúteos:"Quadril estável, contraia o glúteo no topo e evite arquear a lombar.",Panturrilha:"Amplitude completa: desça alongando e suba na ponta dos pés.",Abdômen:"Respire com controle e evite puxar o pescoço.","Cardio/Funcional":"Aqueça antes, mantenha o core firme e priorize técnica antes de velocidade."};
+const PASSOS=["Posicione-se com postura firme e core ativado.","Execute o movimento de forma controlada na fase de esforço.","Retorne devagar na fase de volta, sem perder a postura.","Repita pelo número de repetições planejado e descanse."];
+
+/* ---------- Biblioteca de exercícios ---------- */
+const CAT_TXT=`Peito|crossover|Crossover|Polia alta
+Peito|crucifixo_inclinado|Crucifixo inclinado|Halteres / banco inclinado
+Peito|crucifixo_maquina|Crucifixo na máquina|Máquina
+Peito|crucifixo_polia_baixa|Crucifixo na polia baixa|Polia baixa
+Peito|crucifixo_reto|Crucifixo reto|Halteres / banco reto
+Peito|flexao|Flexão de braço|Peso corporal
+Peito|flexao_declinada|Flexão declinada|Peso corporal / banco
+Peito|paralelas|Paralelas|Paralelas
+Peito|peck_deck|Peck deck|Máquina
+Peito|supino_declinado|Supino declinado|Barra / banco declinado
+Peito|supino_halteres|Supino com halteres|Halteres / banco reto
+Peito|supino_inclinado|Supino inclinado|Barra / banco inclinado
+Peito|supino_inclinado_halter|Supino inclinado com halteres|Halteres / banco inclinado
+Peito|supino_maquina|Supino na máquina|Máquina
+Peito|supino_reto_barra|Supino reto com barra|Barra / banco reto
+Costas|barra_fixa|Barra fixa|Barra fixa
+Costas|crucifixo_invertido|Crucifixo invertido|Halteres / máquina
+Costas|pulldown|Pulldown|Polia alta
+Costas|pullover|Pullover|Haltere / barra
+Costas|puxada_frontal|Puxada frontal|Polia alta
+Costas|remada_baixa|Remada baixa|Polia baixa
+Costas|remada_cavalinho|Remada cavalinho|Barra T / anilha
+Costas|remada_cross|Remada cross|Polia cross
+Costas|remada_curvada|Remada curvada|Barra
+Costas|remada_maquina|Remada na máquina|Máquina
+Costas|remada_supinada|Remada com pegada supinada|Barra
+Costas|remada_t|Remada T|Barra T
+Costas|remada_unilateral|Remada unilateral|Haltere / banco
+Ombros|arnold_press|Arnold press|Halteres
+Ombros|desenvolvimento_halteres|Desenvolvimento com halteres|Halteres
+Ombros|desenvolvimento_maquina|Desenvolvimento na máquina|Máquina
+Ombros|desenvolvimento_militar|Desenvolvimento militar|Barra
+Ombros|desenvolvimento_smith|Desenvolvimento no Smith|Smith
+Ombros|elevacao_frontal|Elevação frontal|Halteres / anilha
+Ombros|elevacao_lateral|Elevação lateral|Halteres
+Ombros|elevacao_lateral_cabo|Elevação lateral no cabo|Polia baixa
+Ombros|elevacao_lateral_unilateral|Elevação lateral unilateral|Haltere
+Ombros|elevacao_maquina|Elevação na máquina|Máquina
+Ombros|face_pull|Face pull|Polia alta / corda
+Ombros|manguito_rotador|Manguito rotador|Elástico / haltere leve
+Bíceps|rosca_21|Rosca 21|Barra
+Bíceps|rosca_alternada|Rosca alternada|Halteres
+Bíceps|rosca_barra_w|Rosca na barra W|Barra W
+Bíceps|rosca_cabo|Rosca no cabo|Polia baixa
+Bíceps|rosca_concentrada|Rosca concentrada|Haltere
+Bíceps|rosca_direta|Rosca direta|Barra
+Bíceps|rosca_inversa|Rosca inversa|Barra
+Bíceps|rosca_martelo|Rosca martelo|Halteres
+Bíceps|rosca_scott|Rosca Scott|Banco Scott
+Bíceps|rosca_spider|Rosca Spider|Banco inclinado
+Tríceps|kickback_polia|Kickback na polia|Polia baixa
+Tríceps|mergulho_banco|Mergulho no banco|Banco
+Tríceps|triceps_supinado_fechado|Tríceps supinado fechado|Barra
+Tríceps|triceps_coice|Tríceps coice|Haltere
+Tríceps|triceps_corda|Tríceps na corda|Polia alta / corda
+Tríceps|triceps_frances|Tríceps francês|Haltere / barra
+Tríceps|triceps_halter|Tríceps com haltere|Haltere
+Tríceps|triceps_pulley_barra|Tríceps pulley com barra|Polia alta / barra
+Tríceps|triceps_testa|Tríceps testa|Barra W
+Tríceps|triceps_unilateral_polia|Tríceps unilateral na polia|Polia alta
+Antebraço|flexao_antebraco|Flexão de antebraço|Barra / haltere
+Antebraço|extensao_punho_halter|Extensão de punho com haltere|Haltere
+Antebraço|rosca_punho|Rosca de punho|Haltere
+Antebraço|rosca_punho_barra|Rosca de punho com barra|Barra
+Antebraço|rosca_punho_invertida|Rosca de punho invertida|Barra
+Trapézio|encolhimento_barra|Encolhimento com barra|Barra
+Trapézio|encolhimento_halter|Encolhimento com halteres|Halteres
+Trapézio|encolhimento_maquina|Encolhimento na máquina|Máquina
+Trapézio|encolhimento_ombros|Encolhimento de ombros|Peso corporal / halteres
+Trapézio|remada_alta|Remada alta|Barra / halteres
+Trapézio|trapezio_smith|Trapézio no Smith|Smith
+Pernas|agachamento_bulgaro|Agachamento búlgaro|Banco + halteres
+Pernas|agachamento_calcanhar_elevado|Agachamento com calcanhar elevado|Anilha / cunha
+Pernas|agachamento_desenvolvimento|Agachamento com desenvolvimento|Halteres
+Pernas|agachamento_frontal|Agachamento frontal|Barra
+Pernas|agachamento_hack|Agachamento hack|Máquina hack
+Pernas|agachamento_livre|Agachamento livre|Barra
+Pernas|agachamento_smith|Agachamento no Smith|Smith
+Pernas|agachamento_sumo|Agachamento sumô|Peso corporal
+Pernas|agachamento_sumo_halter|Agachamento sumô com haltere|Haltere
+Pernas|avanco|Avanço|Halteres / peso corporal
+Pernas|banco_romano|Banco romano|Banco
+Pernas|cadeira_extensora|Cadeira extensora|Máquina
+Pernas|cadeira_flexora|Cadeira flexora|Máquina
+Pernas|good_morning|Good morning|Barra
+Pernas|legpress|Leg press|Leg press
+Pernas|terra_romeno|Levantamento terra romeno|Barra / halteres
+Pernas|mesa_flexora|Mesa flexora|Máquina
+Pernas|passada_livre|Passada livre|Peso corporal / halteres
+Pernas|stiff|Stiff|Barra / halteres
+Glúteos|cadeira_abdutora|Cadeira abdutora|Máquina
+Glúteos|coice_polia|Coice na polia|Polia baixa
+Glúteos|elevacao_pelvica|Elevação pélvica|Barra / banco
+Glúteos|ponte_gluteo|Ponte de glúteo|Peso corporal
+Panturrilha|salto_panturrilha|Salto de panturrilha|Peso corporal
+Panturrilha|panturrilha_em_pe|Panturrilha em pé|Máquina / halteres
+Panturrilha|panturrilha_legpress|Panturrilha no leg press|Leg press
+Panturrilha|panturrilha_sentado|Panturrilha sentado|Máquina
+Panturrilha|panturrilha_smith|Panturrilha no Smith|Smith
+Panturrilha|panturrilha_unilateral|Panturrilha unilateral|Degrau / haltere
+Abdômen|abdominal_bicicleta|Abdominal bicicleta|Peso corporal
+Abdômen|abdominal_declinado|Abdominal declinado|Banco declinado
+Abdômen|abdominal_infra|Abdominal infra|Peso corporal
+Abdômen|abdominal_maquina|Abdominal na máquina|Máquina
+Abdômen|abdominal_obliquo|Abdominal oblíquo|Peso corporal
+Abdômen|abdominal_polia|Abdominal na polia|Polia alta / cabo
+Abdômen|abdominal_rodinha|Abdominal de rodinha|Roda abdominal
+Abdômen|abdominal_supra|Abdominal supra|Peso corporal
+Abdômen|canivete|Canivete / canoinha|Peso corporal
+Abdômen|dead_bug|Dead bug|Peso corporal
+Abdômen|elevacao_pernas|Elevação de pernas|Barra / banco
+Abdômen|prancha|Prancha|Peso corporal
+Abdômen|prancha_lateral|Prancha lateral|Peso corporal
+Abdômen|prancha_remada|Prancha com remada|Halteres
+Abdômen|russian_twist|Russian twist|Peso corporal / anilha
+Cardio/Funcional|battle_rope|Battle rope|Corda naval
+Cardio/Funcional|box_jump|Box jump|Caixa pliométrica
+Cardio/Funcional|burpee|Burpee|Peso corporal
+Cardio/Funcional|clean|Clean|Barra
+Cardio/Funcional|clean_press|Clean and press|Barra
+Cardio/Funcional|farmers_walk|Farmer's walk|Halteres / kettlebells
+Cardio/Funcional|kettlebell_swing|Kettlebell swing|Kettlebell
+Cardio/Funcional|mountain_climber|Mountain climber|Peso corporal
+Cardio/Funcional|sled_push|Sled push|Trenó
+Cardio/Funcional|snatch|Snatch|Barra
+Cardio/Funcional|thruster|Thruster|Barra / halteres
+Cardio/Funcional|turkish_getup|Turkish get-up|Kettlebell
+Cardio/Funcional|wall_ball|Wall ball|Medicine ball`;
+const CAT=CAT_TXT.split("\n").map(l=>{const a=l.split("|");return{g:a[0],id:a[1],n:a[2],e:a[3]}});
+const EX={};CAT.forEach(x=>EX[x.id]=x);
+
+/* ---------- Dados: cache local + nuvem (Supabase) ---------- */
+const DB_KEY="wilfit_db_v1";
+const SES_KEY="wilfit_sb_v1";
+const DIRTY_KEY="wilfit_dirty_v1";
+function fixUser(o){
+  o=(o&&typeof o==="object")?o:{};
+  delete o.senha; /* senhas agora ficam só no Supabase Auth */
+  if(!o.prof||typeof o.prof!=="object")o.prof={nome:""};
+  if(!o.plan||typeof o.plan!=="object")o.plan={};
+  if(!o.prog||typeof o.prog!=="object")o.prog={};
+  if(!Array.isArray(o.cardio))o.cardio=[];
+  return o;
+}
+const mkUser=()=>fixUser({});
+let DB={};
+try{const raw=store.get(DB_KEY);if(raw){const o=JSON.parse(raw);if(o&&typeof o==="object")DB=o}}catch(e){DB={}}
+Object.keys(DB).forEach(k=>{DB[k]=fixUser(DB[k])});
+let SES=null;
+try{SES=JSON.parse(store.get(SES_KEY)||"null")}catch(e){SES=null}
+let DIRTY={};
+try{DIRTY=JSON.parse(store.get(DIRTY_KEY)||"{}")||{}}catch(e){DIRTY={}}
+const saveDirty=()=>store.set(DIRTY_KEY,JSON.stringify(DIRTY));
+const saveLocal=()=>{try{store.set(DB_KEY,JSON.stringify(DB))}catch(e){}};
+const save=()=>{saveLocal();schedule()};
+
+const S={me:null,tab:"home",dia:0,aba:"entrar",form:{em:"",pw:""},err:"",ok:"",busy:false,pend:false,adm:null,sync:"ok",nome:"",q:"",g:"Todos",det:null,detDia:0,clr:false,cf:{t:"Esteira",min:"",km:"",obs:""}};
+const td=()=>(new Date().getDay()+6)%7;
+S.dia=td();
+if(SES&&SES.user&&SES.refresh_token&&DB[SES.user.email])S.me=SES.user.email;else SES=null;
+
+const U=()=>DB[S.me];
+const plan=d=>U().plan[d];
+const ensure=d=>plan(d)||(U().plan[d]={n:"Treino de "+DN[d],ex:[]});
+const dateOf=d=>{const t=new Date();t.setHours(12,0,0,0);t.setDate(t.getDate()-td()+d);return t};
+const dayLabel=d=>dateOf(d).getDate();
+/* Séries são guardadas por data: cada semana começa zerada automaticamente */
+const serKey=(d,id)=>isoLocal(dateOf(+d))+":"+id;
+const serArr=(d,id)=>{const p=U().prog,k=serKey(d,id);return p[k]||(p[k]=[])};
+const doneN=(d,e)=>serArr(d,e.id).slice(0,e.s).filter(Boolean).length;
+const clearProg=(d,id)=>{const p=U().prog,pre=isoLocal(dateOf(+d))+":";Object.keys(p).forEach(k=>{if(id?k===pre+id:k.indexOf(pre)===0)delete p[k]})};
+const pruneProg=()=>{const lim=new Date();lim.setDate(lim.getDate()-60);const l=isoLocal(lim);Object.keys(U().prog).forEach(k=>{if(k.slice(0,10)<l)delete U().prog[k]})};
+const toast=m=>{document.querySelectorAll(".toast").forEach(t=>t.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),m.length>50?4500:2000)};
+const pace=(min,km)=>{if(!km||!min)return"";const t=Math.round(min/km*60);return pad(Math.floor(t/60))+":"+pad(t%60)+"/km"};
+
+/* ---------- Supabase: sessão e requisições ---------- */
+function setSes(j){
+  const u=j.user||(SES&&SES.user)||{};
+  SES={access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(+j.expires_in||3600),user:{id:u.id,email:String(u.email||"").toLowerCase()}};
+  store.set(SES_KEY,JSON.stringify(SES));
+}
+let REF=null;
+function refreshSes(){
+  if(!SES)return Promise.reject({auth:true});
+  if(REF)return REF;
+  REF=(async()=>{
+    const r=await tfetch(SB_URL+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:SES.refresh_token})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok||!j.access_token){if(r.status>=400&&r.status<500)throw{auth:true};throw{msg:"Servidor indisponível."}}
+    setSes(j);return j.access_token;
+  })();
+  const clear=()=>{REF=null};REF.then(clear,clear);
+  return REF;
+}
+async function token(){
+  if(!SES)throw{auth:true};
+  if(SES.expires_at-60>Date.now()/1000)return SES.access_token;
+  return refreshSes();
+}
+async function tfetch(url,opt,ms){
+  const c=new AbortController(),t=setTimeout(()=>c.abort(),ms||12000);
+  try{return await fetch(url,Object.assign({signal:c.signal},opt))}finally{clearTimeout(t)}
+}
+async function rest(path,opt){
+  opt=opt||{};
+  const go=tk=>tfetch(SB_URL+"/rest/v1/"+path,{method:opt.method||"GET",keepalive:!!opt.keepalive,body:opt.body,headers:Object.assign({apikey:SB_KEY,Authorization:"Bearer "+tk,"Content-Type":"application/json"},opt.headers||{})});
+  let r;
+  try{r=await go(await token())}
+  catch(e){if(e&&e.auth)throw e;await new Promise(x=>setTimeout(x,1200));r=await go(await token())}
+  if(r.status===401)r=await go(await refreshSes());
+  return r;
+}
+const isTableErr=(r,j)=>r.status===404||(j&&(j.code==="PGRST205"||j.code==="42P01"));
+async function pull(uid){
+  const r=await rest("wilfit_data?select=data&user_id=eq."+encodeURIComponent(uid));
+  const j=await r.json().catch(()=>null);
+  if(!r.ok){const e={msg:(j&&j.message)||"Erro "+r.status};if(isTableErr(r,j))e.table=true;throw e}
+  return Array.isArray(j)&&j[0]?j[0]:null;
+}
+
+/* ---------- Fotos dos exercícios (Supabase Storage, bucket público "fotos") ---------- */
+const BUCKET="fotos",PH_KEY="wilfit_photos_v1";
+const normKey=s=>norm(s).replace(/\.[a-z0-9]{2,5}$/,"").replace(/[^a-z0-9]+/g,"");
+let PH={},PH_N=0;
+try{const c=JSON.parse(store.get(PH_KEY)||"null");if(c&&c.m){PH=c.m;PH_N=Object.keys(PH).length}}catch(e){}
+const pubUrl=p=>SB_URL+"/storage/v1/object/public/"+BUCKET+"/"+p.split("/").map(encodeURIComponent).join("/");
+function photoKnown(x){return PH[normKey(x.id)]||PH[normKey(x.n)]||""}
+function photoUrls(x){
+  const k=photoKnown(x);if(k)return [pubUrl(k)];
+  if(PH_N>0)return [];
+  /* lista indisponível: tenta nomes prováveis */
+  const ex=["jpg","jpeg","png","webp"],base=[x.id,x.n,norm(x.n).replace(/\s+/g,"_")],out=[];
+  base.forEach(b=>ex.forEach(e=>{const u=pubUrl(b+"."+e);if(out.indexOf(u)<0)out.push(u)}));
+  return out;
+}
+function imgErr(el){
+  let c=[];try{c=JSON.parse(el.dataset.c)}catch(e){}
+  const i=(+el.dataset.i||0)+1;
+  if(i<c.length){el.dataset.i=i;el.src=c[i]}
+  else{el.style.display="none";const a=document.getElementById("fanim");if(a)a.style.display="block"}
+}
+async function listDir(prefix){
+  const h={apikey:SB_KEY,"Content-Type":"application/json"};
+  if(SES&&SES.access_token)h.Authorization="Bearer "+SES.access_token;
+  const r=await tfetch(SB_URL+"/storage/v1/object/list/"+BUCKET,{method:"POST",headers:h,body:JSON.stringify({prefix:prefix,limit:1000,offset:0,sortBy:{column:"name",order:"asc"}})},15000);
+  if(!r.ok)throw new Error("list "+r.status);
+  return r.json();
+}
+async function loadPhotos(){
+  try{
+    const m={};
+    const walk=async(prefix,depth)=>{
+      const L=await listDir(prefix);
+      for(const o of L){
+        if(!o||!o.name)continue;
+        const path=prefix?prefix+"/"+o.name:o.name;
+        if(!o.id&&depth<2){await walk(path,depth+1);continue}
+        if(/\.(jpe?g|png|webp|gif|avif)$/i.test(o.name)){const k=normKey(o.name);if(!m[k])m[k]=path}
+      }
+    };
+    await walk("",0);
+    const mudou=JSON.stringify(m)!==JSON.stringify(PH);
+    PH=m;PH_N=Object.keys(m).length;
+    store.set(PH_KEY,JSON.stringify({m:m,t:Date.now()}));
+    const ae=document.activeElement;
+    if(mudou&&S.me&&(S.det||S.tab==="lib")&&!(ae&&/INPUT|SELECT/.test(ae.tagName)))R();
+  }catch(e){}
+}
+
+/* ---------- Status da conexão (internet + Supabase) ---------- */
+const NET={st:"chk",msg:"Verificando conexão…"};
+function netHtml(){
+  const ico=NET.st==="ok"?"Conectado":NET.st==="chk"?"Verificando":NET.st==="tbl"?"Falta configurar":NET.st==="off"?"Sem internet":"Supabase indisponível";
+  return `<div class="net ${NET.st}" role="status"><i class="dot"></i><span><b>${ico}</b> · ${esc(NET.msg)}</span><button data-a="net">Testar</button></div>`;
+}
+const netBar=()=>`<div id="net">${netHtml()}</div>`;
+function paintNet(){const e=document.getElementById("net");if(e)e.innerHTML=netHtml()}
+function setNet(st,msg){NET.st=st;NET.msg=msg;paintNet()}
+let checking=false;
+async function checkNet(){
+  if(checking)return;checking=true;
+  setNet("chk","Verificando…");
+  try{
+    if(!navigator.onLine){setNet("off","Sem internet. Seus dados ficam salvos no aparelho e sobem quando a conexão voltar.");return}
+    /* 1) alcance de rede: qualquer resposta (mesmo opaca) prova que o servidor está acessível */
+    try{await tfetch(SB_URL+"/auth/v1/health",{mode:"no-cors"},8000)}
+    catch(e){setNet(navigator.onLine?"srv":"off",navigator.onLine?"Não foi possível alcançar o Supabase. Abra o app direto no navegador (não pelo visualizador de arquivos/chat) ou verifique se o projeto está pausado.":"Sem internet. Seus dados ficam salvos no aparelho.");return}
+    /* 2) chave: se a antiga for recusada, tenta a chave publishable */
+    let r=await tfetch(SB_URL+"/auth/v1/health",{headers:{apikey:SB_KEY}},8000);
+    if(r.status===401||r.status===403){SB_KEY=SB_PUB;r=await tfetch(SB_URL+"/auth/v1/health",{headers:{apikey:SB_KEY}},8000)}
+    if(r.status===401||r.status===403){setNet("srv","Supabase alcançado, mas a chave de acesso foi recusada. Confira a chave anon/publishable no painel.");return}
+    if(r.status>=500){setNet("srv","Supabase fora do ar (projeto pausado?). Abra o painel do Supabase e clique em Restore.");return}
+    if(S.me&&SES){
+      const t=await rest("wilfit_data?select=user_id&limit=1");
+      if(t.ok){setNet("ok","Internet e Supabase funcionando. Dados na nuvem.");schedule();return}
+      const j=await t.json().catch(()=>null);
+      if(isTableErr(t,j)){setNet("tbl","Supabase alcançado, mas a tabela não existe. Rode o supabase_setup.sql no SQL Editor.");return}
+      setNet("srv","Supabase respondeu com erro: "+((j&&j.message)||t.status));return
+    }
+    setNet("ok","Internet e Supabase funcionando.");
+  }catch(e){
+    setNet(navigator.onLine?"srv":"off",navigator.onLine?"Resposta lenta ou instável do Supabase. Toque em Testar para tentar de novo.":"Sem internet. Seus dados ficam salvos no aparelho.");
+  }finally{checking=false}
+}
+
+/* ---------- Sincronização ---------- */
+const SYNC_TXT={ok:"☁ Sincronizado",pend:"☁ Salvando…",err:"⚠ Falha ao sincronizar",off:"☁ Offline"};
+let LASTSYNC=0;
+function paintSync(){const e=document.getElementById("sync");if(!e)return;
+  if(S.sync==="ok"&&LASTSYNC){const d=new Date(LASTSYNC);e.textContent="☁ Sincronizado "+pad(d.getHours())+":"+pad(d.getMinutes())}
+  else e.textContent=SYNC_TXT[S.sync]||""}
+function setSync(s){S.sync=s;if(s==="ok")LASTSYNC=Date.now();paintSync()}
+let pushing=false,timer=null,LAST="",WARNED=false;
+function schedule(){
+  if(!S.me||!SES||!DB[S.me]||S.pend)return;
+  if(JSON.stringify(DB[S.me])===LAST)return;
+  DIRTY[S.me]=true;saveDirty();setSync("pend");
+  clearTimeout(timer);timer=setTimeout(()=>push(),900);
+}
+async function push(ka){
+  clearTimeout(timer);timer=null;
+  if(!S.me||!SES||pushing||S.pend)return;
+  const em=S.me,uid=SES.user.id,snap=JSON.stringify(DB[em]);
+  if(snap===LAST&&!DIRTY[em]){setSync("ok");return}
+  pushing=true;
+  try{
+    const r=await rest("wilfit_data?on_conflict=user_id",{method:"POST",keepalive:!!ka,headers:{Prefer:"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({user_id:uid,email:em,data:JSON.parse(snap),updated_at:new Date().toISOString()})});
+    if(!r.ok){const j=await r.json().catch(()=>null);throw{msg:(j&&j.message)||"Erro "+r.status,table:isTableErr(r,j),perm:!!(j&&j.code==="42501")}}
+    LAST=snap;
+    if(NET.st!=="ok")setNet("ok","Internet e Supabase funcionando. Dados na nuvem.");
+    if(S.me===em){
+      if(JSON.stringify(DB[em])===snap){delete DIRTY[em];saveDirty();setSync("ok")}
+      else{pushing=false;schedule()}
+    }
+  }catch(e){
+    if(e&&e.auth){forceLogout("Sessão expirada. Entre novamente.")}
+    else{
+      setSync(navigator.onLine?"err":"off");
+      if(e&&e.table)setNet("tbl","Tabela não existe no Supabase. Rode o supabase_setup.sql no SQL Editor.");
+      else if(!navigator.onLine||(e&&e.name==="AbortError")||(e instanceof TypeError))checkNet();
+      if(e&&(e.table||e.perm)&&!WARNED){WARNED=true;toast(e.table?"Tabela não encontrada no Supabase. Rode o supabase_setup.sql.":"Sem permissão no Supabase. Rode o supabase_setup.sql (políticas RLS).")}
+    }
+  }finally{pushing=false}
+}
+const AP_KEY="wilfit_ap_v1";
+function apGet(em){try{return !!(JSON.parse(store.get(AP_KEY)||"{}")[em])}catch(e){return false}}
+function apSet(em,v){try{const o=JSON.parse(store.get(AP_KEY)||"{}");o[em]=!!v;store.set(AP_KEY,JSON.stringify(o))}catch(e){}}
+async function approvedState(uid){
+  const r=await rest("wilfit_users?select=approved&user_id=eq."+encodeURIComponent(uid));
+  const j=await r.json().catch(()=>null);
+  if(!r.ok){const e={msg:(j&&j.message)||"Erro "+r.status};if(isTableErr(r,j))e.table=true;throw e}
+  return !!(Array.isArray(j)&&j[0]&&j[0].approved);
+}
+async function boot(){
+  if(!S.me||!SES||pushing)return;
+  const em=S.me;
+  try{
+    /* 1) aprovação do administrador (checada a cada sincronização) */
+    const ap=await approvedState(SES.user.id);
+    if(S.me!==em)return;
+    apSet(em,ap);
+    if(!ap){if(!S.pend){S.pend=true;R()}else paintNet();setSync("ok");return}
+    if(S.pend){S.pend=false;await enter(em);R();return}
+    /* 2) sincronização dos dados */
+    if(DIRTY[em]){await push();return}
+    const row=await pull(SES.user.id);
+    if(S.me!==em)return;
+    if(row&&row.data){
+      const nd=fixUser(row.data),a=JSON.stringify(nd);
+      LAST=a;
+      if(DIRTY[em])return;
+      if(a!==JSON.stringify(DB[em])){
+        DB[em]=nd;saveLocal();
+        const ae=document.activeElement;
+        if(!(ae&&/INPUT|SELECT/.test(ae.tagName)))R();
+      }
+      setSync("ok");
+    }else{LAST="";DIRTY[em]=true;saveDirty();await push()}
+  }catch(e){
+    if(e&&e.auth)forceLogout("Sessão expirada. Entre novamente.");
+    else{setSync(navigator.onLine?"err":"off");if(e&&e.table&&!WARNED){WARNED=true;toast("Tabela não encontrada no Supabase. Rode o supabase_setup.sql.")}}
+  }
+}
+function forceLogout(m){SES=null;store.set(SES_KEY,"");S.me=null;S.det=null;S.pend=false;S.adm=null;S.err=m||"";S.ok="";stopRest();R()}
+async function doLogout(){
+  const em=S.me;
+  if(em&&SES&&DIRTY[em]){setSync("pend");await Promise.race([push(),new Promise(r=>setTimeout(r,4000))])}
+  SES=null;store.set(SES_KEY,"");S.me=null;S.det=null;S.pend=false;S.adm=null;S.form.pw="";S.tab="home";S.err="";S.ok="";LAST="";stopRest();R();
+}
+
+/* ---------- Componentes ---------- */
+function serieChips(d,e){
+  const arr=serArr(d,e.id);
+  return `<div class="sers">${Array.from({length:e.s},(_,n)=>`<button class="ser ${arr[n]?"on":""}" data-a="ser" data-d="${d}" data-id="${esc(e.id)}" data-n="${n}" aria-label="Série ${n+1}${arr[n]?" concluída":""}">${arr[n]?"✓":n+1}</button>`).join("")}</div>`;
+}
+function wkStrip(){
+  return `<div class="wk">${DN.map((n,i)=>{const p=plan(i);return `<button class="dy ${i===S.dia?"on":""} ${i===td()?"hj":""}" data-a="dia" data-v="${i}">${n}<b>${dayLabel(i)}</b><i class="${p&&p.ex.length?"dt":""}"></i></button>`}).join("")}</div><div id="rest"></div>`;
+}
+
+/* ---------- Telas ---------- */
+function vLogin(){
+  return `<div class="login">
+  <div class="logo" style="font-size:40px;text-align:center">Wil<span>Fit</span></div>
+  ${netBar()}
+  <div class="tabs"><button class="${S.aba==="entrar"?"on":""}" data-a="aba" data-v="entrar">Entrar</button><button class="${S.aba==="cad"?"on":""}" data-a="aba" data-v="cad">Criar conta</button></div>
+  <label class="lbl" for="em">E-mail</label><input id="em" type="email" autocomplete="email" data-f="em" value="${esc(S.form.em)}" placeholder="seuemail@exemplo.com">
+  <label class="lbl" for="pw" style="margin-top:10px">Senha</label><input id="pw" type="password" autocomplete="${S.aba==="cad"?"new-password":"current-password"}" data-f="pw" value="${esc(S.form.pw)}" placeholder="${S.aba==="cad"?"Mínimo 6 caracteres":"Sua senha"}">
+  ${S.ok?`<p class="ok">${esc(S.ok)}</p>`:""}
+  <p class="err">${esc(S.err)}</p>
+  <button class="btn pri w" data-a="auth" ${S.busy?"disabled":""}>${S.busy?"Aguarde…":(S.aba==="cad"?"Criar conta":"Entrar")}</button>
+  <button class="lk" data-a="adm">Modo admin</button>
+  </div>`;
+}
+
+function vPend(){
+  return `<div class="login">
+  <div class="logo" style="font-size:40px;text-align:center">Wil<span>Fit</span></div>
+  ${netBar()}
+  <div class="card"><span class="lab">Conta criada</span><h2 style="margin:6px 0">Aguardando aprovação</h2>
+  <p class="mu" style="font-size:14px;line-height:1.5">A conta <b style="color:#fff;overflow-wrap:anywhere">${esc(S.me)}</b> já existe, mas precisa ser aprovada pelo administrador. Esta tela confere sozinha a cada 30 segundos e libera o app assim que for aprovada.</p></div>
+  <button class="btn pri w" style="margin-top:14px" data-a="chkap">Verificar agora</button>
+  <button class="btn w" style="margin-top:10px" data-a="sair">Sair da conta</button>
+  <button class="lk" data-a="adm">Modo admin</button>
+  </div>`;
+}
+function modalAdm(){
+  const A=S.adm;if(!A)return"";
+  let corpo;
+  if(A.step!=="list"){
+    corpo=`<label class="lbl" for="ap" style="margin-top:14px">Senha do administrador</label><input id="ap" type="password" inputmode="numeric" autocomplete="off" data-f="admpw" value="${esc(A.pw)}" placeholder="Senha">
+    <p class="err">${esc(A.err)}</p><button class="btn pri w" data-a="admgo" ${A.busy?"disabled":""}>${A.busy?"Verificando…":"Entrar"}</button>`;
+  }else{
+    const L=A.users.slice().sort((a,b)=>(a.approved===b.approved?0:a.approved?1:-1)),pe=L.filter(u=>!u.approved).length;
+    corpo=`<p class="mu" style="margin:6px 0 4px">${L.length} usuário(s) · ${pe} aguardando aprovação · atualiza a cada 30 s</p>
+    <p class="err">${esc(A.err)}</p>
+    ${L.map(u=>`<div class="card row sp"><div style="min-width:0"><b style="overflow-wrap:anywhere">${esc(u.email||u.id)}</b><div class="mu">${esc(String(u.created_at||"").slice(0,10).split("-").reverse().join("/"))} · <span class="st ${u.approved?"ok":"no"}">${u.approved?"Aprovado":"Pendente"}</span></div></div>
+    <button class="btn ${u.approved?"dng":"pri"}" style="height:38px;padding:0 14px" data-a="admset" data-v="${esc(u.id)}" data-ok="${u.approved?0:1}" ${A.busy?"disabled":""}>${u.approved?"Bloquear":"Aprovar"}</button></div>`).join("")||'<p class="mu" style="margin-top:12px">Nenhum usuário ainda.</p>'}
+    <div class="g2"><button class="btn" data-a="admref">Atualizar</button><button class="btn dng" data-a="admclose">Sair do admin</button></div>`;
+  }
+  return `<div class="ov" data-a="admclose"><div class="sheet" role="dialog" aria-modal="true"><div class="row sp"><h2>Modo administrador</h2><button class="ib" data-a="admclose" aria-label="Fechar">✕</button></div>${corpo}</div></div>`;
+}
+function vHome(){
+  const p=plan(S.dia),lab=S.dia===td()?"Treino de hoje":"Treino de "+DN[S.dia];
+  let total=0,feitas=0;
+  if(p)p.ex.forEach(e=>{total+=e.s;feitas+=doneN(S.dia,e)});
+  let corpo;
+  if(!p||!p.ex.length)corpo=`<div class="card"><span class="lab">${lab}</span><h2 style="margin:6px 0">Sem treino neste dia</h2><p class="mu">Crie um treino na aba Treinos ou salve exercícios pela Biblioteca.</p><button class="btn pri" style="margin-top:12px" data-a="tab" data-v="trn">Ir para Treinos</button></div>`;
+  else corpo=`<div class="card"><span class="lab">${lab}</span><h2 style="margin:6px 0 8px">${esc(p.n)}</h2>
+    <span class="tag">${p.ex.length} exercícios</span><span class="tag">${feitas}/${total} séries concluídas</span>
+    <div class="bar"><i style="width:${total?feitas/total*100:0}%"></i></div>
+    ${p.ex.map(e=>{const c=doneN(S.dia,e);return `<div class="ex"><div class="row sp"><b>${esc(EX[e.id].n)}</b><span class="${c===e.s?"tag-done":"mu"}">${c}/${e.s} séries${c===e.s?" ✓":""}</span></div>${serieChips(S.dia,e)}</div>`}).join("")}
+    </div>`;
+  return `<p class="mu">Olá, ${esc(U().prof.nome||S.me)}</p>${netBar()}${wkStrip()}${corpo}<button class="lk" data-a="adm">Modo admin</button>`;
+}
+
+function vTreinos(){
+  const p=plan(S.dia);
+  let h=`<h1>Treinos</h1><p class="mu">Escolha o dia, crie e acompanhe as séries.</p>${wkStrip()}`;
+  if(!p){
+    return h+`<div class="card"><label class="lbl" for="nt">Nome do treino</label><input id="nt" data-f="nome" value="${esc(S.nome)}" placeholder="Ex.: Peito e Tríceps"><button class="btn pri w" style="margin-top:12px" data-a="criar">Criar treino de ${DN[S.dia]}</button></div>`;
+  }
+  h+=`<div class="card"><label class="lbl" for="pn">Nome do treino de ${DN[S.dia]}</label><input id="pn" data-f="pn" value="${esc(p.n)}"></div>`;
+  h+=p.ex.map((e,i)=>{const c=doneN(S.dia,e);return `<div class="card">
+    <div class="row"><b style="flex:1;min-width:0">${esc(EX[e.id].n)}</b>
+    <button class="ib" data-a="up" data-v="${i}" ${i?"":"disabled"} aria-label="Subir">▲</button><button class="ib" data-a="dn" data-v="${i}" ${i<p.ex.length-1?"":"disabled"} aria-label="Descer">▼</button><button class="ib" data-a="rm" data-v="${i}" aria-label="Remover">✕</button></div>
+    <div class="g3"><div><label class="lbl">Séries</label><input type="number" inputmode="numeric" min="1" data-f="ex" data-i="${i}" data-k="s" value="${e.s}"></div><div><label class="lbl">Repetições</label><input data-f="ex" data-i="${i}" data-k="r" value="${esc(e.r)}"></div><div><label class="lbl">Descanso (s)</label><input type="number" inputmode="numeric" min="0" data-f="ex" data-i="${i}" data-k="d" value="${e.d}"></div></div>
+    <div class="mu" style="margin-top:10px"><span class="${c===e.s?"tag-done":""}">${c}/${e.s} séries concluídas</span></div>${serieChips(S.dia,e)}</div>`}).join("")||`<div class="card"><p class="mu">Treino vazio. Adicione exercícios pela Biblioteca.</p></div>`;
+  h+=`<button class="btn pri w" style="margin-top:14px" data-a="tab" data-v="lib">Adicionar exercício</button>`;
+  h+=`<button class="btn dng w" style="margin-top:10px" data-a="clr">${S.clr?"Toque de novo para apagar o dia":"Apagar treino deste dia"}</button>`;
+  return h;
+}
+
+function vCardio(){
+  const c=U().cardio,f=S.cf,ini=new Date();ini.setDate(ini.getDate()-6);const ds=isoLocal(ini);
+  const sw=c.filter(x=>x.date>=ds);
+  return `<h1>Cardio</h1><p class="mu">Registre suas sessões.</p>
+  <div class="g3s"><div class="stat"><b>${sw.length}</b><span>Sessões (7 dias)</span></div><div class="stat"><b>${sw.reduce((a,x)=>a+x.min,0)}</b><span>Minutos</span></div><div class="stat"><b>${sw.reduce((a,x)=>a+x.km,0).toLocaleString("pt-BR",{maximumFractionDigits:2})}</b><span>Km</span></div></div>
+  <div class="card"><h3 style="margin-top:0">Nova sessão</h3><label class="lbl">Tipo</label><select data-f="cf" data-k="t">${["Esteira","Caminhada","Corrida","Bicicleta","Elíptico"].map(t=>`<option ${f.t===t?"selected":""}>${t}</option>`).join("")}</select>
+  <div class="row" style="margin-top:10px"><div style="flex:1"><label class="lbl">Tempo (min)</label><input type="number" inputmode="decimal" data-f="cf" data-k="min" value="${esc(f.min)}"></div><div style="flex:1"><label class="lbl">Distância (km)</label><input type="number" inputmode="decimal" step="0.01" data-f="cf" data-k="km" value="${esc(f.km)}"></div></div>
+  <label class="lbl" style="margin-top:10px">Observações</label><input data-f="cf" data-k="obs" value="${esc(f.obs)}"><button class="btn pri w" style="margin-top:12px" data-a="crg">Registrar</button></div>
+  <h3 style="margin-top:20px">Histórico</h3>${c.map((x,i)=>`<div class="card row sp"><div><b>${esc(x.t)}</b><div class="mu">${x.date.split("-").reverse().join("/")} · ${x.min} min${x.km?" · "+x.km+" km · "+pace(x.min,x.km):""}${x.obs?" · "+esc(x.obs):""}</div></div><button class="ib" data-a="cdel" data-v="${i}" aria-label="Excluir">✕</button></div>`).reverse().join("")||'<p class="mu" style="margin-top:12px">Nenhuma sessão registrada.</p>'}`;
+}
+
+function vPerfil(){
+  const p=U().prof,alt=+p.alt,pes=+p.peso;
+  let imc="--",cls="Informe altura e peso";
+  if(alt>0&&pes>0){const h=alt<3?alt:alt/100,v=pes/(h*h);imc=v.toFixed(1).replace(".",",");cls=v<18.5?"Abaixo do peso":v<25?"Peso normal":v<30?"Sobrepeso":"Obesidade"}
+  return `<h1>Perfil</h1><p class="mu">Seus dados pessoais e metas.</p>
+  <div class="card"><label class="lbl">Nome</label><input data-f="pf" data-k="nome" value="${esc(p.nome||"")}" placeholder="Seu nome">
+  <div class="g2"><div><label class="lbl">Altura (cm)</label><input type="number" inputmode="decimal" data-f="pf" data-k="alt" value="${esc(p.alt||"")}"></div><div><label class="lbl">Peso (kg)</label><input type="number" inputmode="decimal" step="0.1" data-f="pf" data-k="peso" value="${esc(p.peso||"")}"></div></div>
+  <label class="lbl" style="margin-top:10px">Objetivo</label><input data-f="pf" data-k="obj" value="${esc(p.obj||"")}" placeholder="Ex.: ganhar massa magra"></div>
+  <div class="card row sp"><div><span class="lab">IMC</span><div class="mu">${cls}</div></div><b style="font-size:30px">${imc}</b></div>
+  <div class="card"><div class="mu">E-mail</div><b style="overflow-wrap:anywhere">${esc(S.me)}</b></div>
+  <button class="btn dng w" style="margin-top:20px" data-a="sair">Sair da conta</button>`;
+}
+
+function listaBib(){
+  const q=norm(S.q),L=CAT.filter(x=>(S.g==="Todos"||x.g===S.g)&&norm(x.n+" "+x.g+" "+x.e).includes(q));
+  return L.length?L.map(x=>{const dias=DN.filter((_,i)=>plan(i)&&plan(i).ex.some(e=>e.id===x.id)).length;
+    const fk=photoKnown(x);
+    return `<div class="card row" style="cursor:pointer" data-a="det" data-v="${x.id}">${fk?`<img class="th" loading="lazy" src="${esc(pubUrl(fk))}" alt="" onerror="this.style.display='none'">`:""}<div style="flex:1;min-width:0"><b>${esc(x.n)}</b><div class="mu">${esc(x.g)} · ${esc(x.e)}</div></div>${dias?`<span class="tag">${dias} dia(s)</span>`:""}<span style="color:var(--g);font-size:22px">›</span></div>`}).join(""):'<p class="mu" style="text-align:center;padding:30px 0">Nada encontrado</p>';
+}
+function vBiblioteca(){
+  return `<h1>Biblioteca</h1><p class="mu">${CAT.length} exercícios. Toque em um para ver como executar.</p>
+  <input data-f="q" placeholder="Buscar exercício" value="${esc(S.q)}" style="margin-top:12px">
+  <div class="pills">${["Todos",...GR].map(g=>`<button class="pill ${S.g===g?"on":""}" data-a="gp" data-v="${esc(g)}">${esc(g)}</button>`).join("")}</div>
+  <div id="lista">${listaBib()}</div>`;
+}
+
+function modalDet(){
+  const x=EX[S.det];if(!x)return"";
+  return `<div class="ov" data-a="fechar"><div class="sheet" role="dialog" aria-modal="true">
+  <div class="row sp"><div><h2>${esc(x.n)}</h2><div class="mu">${esc(x.g)} · ${esc(x.e)}</div></div><button class="ib" data-a="fechar" aria-label="Fechar">✕</button></div>
+  ${(()=>{const u=photoUrls(x);return u.length?`<img class="foto" src="${esc(u[0])}" data-c="${esc(JSON.stringify(u))}" data-i="0" alt="${esc(x.n)}" onerror="imgErr(this)">`:""})()}
+  <div id="fanim" style="display:${photoUrls(x).length?"none":"block"}">
+  <svg class="anim" viewBox="0 0 200 170" aria-label="Demonstração esquemática">
+    <circle cx="100" cy="30" r="12" fill="none" stroke="#1DB954" stroke-width="3"/>
+    <line x1="100" y1="42" x2="100" y2="100" stroke="#fff" stroke-width="3"/>
+    <line x1="100" y1="100" x2="80" y2="155" stroke="#fff" stroke-width="3"/>
+    <line x1="100" y1="100" x2="120" y2="155" stroke="#fff" stroke-width="3"/>
+    <g class="arm"><line x1="100" y1="58" x2="100" y2="100" stroke="#1DB954" stroke-width="3" stroke-linecap="round"/></g>
+  </svg>
+  <p class="mu" style="text-align:center;font-size:12px">Demonstração esquemática do movimento</p>
+  </div>
+  <h3>Como executar</h3><ol class="steps">${PASSOS.map(s=>`<li>${s}</li>`).join("")}</ol>
+  <div class="card"><span class="lab">Postura</span><p style="margin-top:6px;font-size:14px;line-height:1.5">${GD[x.g]||""}</p></div>
+  <h3>Salvar em qual dia?</h3>
+  <div class="pills">${DN.map((n,i)=>{const on=plan(i)&&plan(i).ex.some(e=>e.id===x.id);return `<button class="pill ${S.detDia===i?"on":""}" data-a="ddia" data-v="${i}">${n}${on?" ✓":""}</button>`}).join("")}</div>
+  <button class="btn pri w" data-a="salvar">Salvar em ${DN[S.detDia]}</button>
+  </div></div>`;
+}
+
+/* ---------- Render ---------- */
+function R(){
+  document.body.classList.toggle("lock",!!((S.me&&S.det)||S.adm));
+  if(!S.me){$("#app").innerHTML=vLogin()+modalAdm();paintNet();return}
+  if(S.pend){$("#app").innerHTML=vPend()+modalAdm();paintNet();return}
+  const views={home:vHome,trn:vTreinos,crd:vCardio,lib:vBiblioteca,prf:vPerfil};
+  const tabs=[["home","Início"],["trn","Treinos"],["crd","Cardio"],["lib","Biblioteca"],["prf","Perfil"]];
+  const view=views[S.tab]||vHome;
+  $("#app").innerHTML=`<div class="wrap"><div class="top"><div class="logo">Wil<span>Fit</span></div><div class="row" style="gap:8px;min-width:0"><span id="sync" class="mu" style="font-size:11px;white-space:nowrap"></span><span class="chip" style="max-width:130px">${esc(S.me)}</span></div></div>${view()}</div>
+  <nav class="nav">${tabs.map(t=>`<button class="${S.tab===t[0]?"on":""}" data-a="tab" data-v="${t[0]}">${t[1]}</button>`).join("")}</nav>${S.det?modalDet():""}${modalAdm()}`;
+  paintRest();paintSync();
+}
+
+/* ---------- Cronômetro de descanso (só roda enquanto há descanso ativo) ---------- */
+let REST=null,RT=null;
+function startRest(seg){
+  REST={end:Date.now()+seg*1000};
+  if(!RT)RT=setInterval(paintRest,250);
+  paintRest();
+}
+function stopRest(){REST=null;if(RT){clearInterval(RT);RT=null}paintRest()}
+function paintRest(){
+  const box=document.getElementById("rest");
+  if(REST&&S.me){
+    const left=Math.ceil((REST.end-Date.now())/1000);
+    if(left<=0){stopRest();toast("Descanso concluído ✓");return}
+    if(box){
+      const html=`<div class="rest"><span>Descanso</span><b>${pad(Math.floor(left/60))}:${pad(left%60)}</b><button class="btn" data-a="pular">Pular</button></div>`;
+      if(box.dataset.h!==html){box.dataset.h=html;box.innerHTML=html}
+    }
+  }else{
+    if(RT){clearInterval(RT);RT=null}
+    if(box&&box.dataset.h){box.dataset.h="";box.innerHTML=""}
+  }
+}
+
+/* ---------- Modo administrador ---------- */
+async function rpc(name,args){
+  const h={apikey:SB_KEY,"Content-Type":"application/json"};
+  let tk=null;try{if(SES)tk=await token()}catch(e){}
+  if(tk)h.Authorization="Bearer "+tk;else if(SB_KEY.indexOf("eyJ")===0)h.Authorization="Bearer "+SB_KEY;
+  const r=await tfetch(SB_URL+"/rest/v1/rpc/"+name,{method:"POST",headers:h,body:JSON.stringify(args)},15000);
+  const j=await r.json().catch(()=>null);
+  if(!r.ok){const e={msg:(j&&j.message)||"Erro "+r.status};if(r.status===404||(j&&(j.code==="PGRST202"||j.code==="42883")))e.fn=true;throw e}
+  return j||{};
+}
+async function admLoad(){
+  const A=S.adm;if(!A||A.busy)return;
+  A.busy=true;R();
+  try{
+    const j=await rpc("wilfit_admin_list",{pw:A.pw});
+    if(!S.adm)return;
+    if(j.erro){A.err=j.erro==="bloqueado"?"Muitas tentativas erradas. Aguarde 10 minutos.":"Senha incorreta.";A.step="pw";A.pw=""}
+    else{A.users=j.users||[];A.step="list";A.err=""}
+  }catch(e){A.err=e&&e.fn?"Função do admin não encontrada. Rode o supabase_setup.sql atualizado.":((e&&e.msg)||"Sem conexão com o Supabase.")}
+  A.busy=false;R();
+}
+async function admSet(uid,ok){
+  const A=S.adm;if(!A||A.busy)return;
+  A.busy=true;R();
+  try{
+    const j=await rpc("wilfit_admin_set",{pw:A.pw,uid:uid,ok:ok});
+    if(j.erro){A.err="Sessão de admin inválida. Entre de novo.";A.step="pw";A.pw=""}
+    else toast(ok?"Usuário aprovado ✓":"Usuário bloqueado");
+  }catch(e){A.err=(e&&e.msg)||"Sem conexão com o Supabase."}
+  A.busy=false;
+  if(A.step==="list")admLoad();else R();
+}
+
+/* ---------- Autenticação (Supabase Auth) ---------- */
+function amsg(j){
+  const m=String(j.msg||j.message||j.error_description||j.error||""),c=j.error_code||"";
+  if(c==="invalid_credentials"||/invalid login/i.test(m))return"E-mail ou senha incorretos.";
+  if(c==="email_not_confirmed"||/not confirmed/i.test(m))return"Confirme seu e-mail pelo link que enviamos e tente de novo.";
+  if(c==="user_already_exists"||/already registered/i.test(m))return"Este e-mail já tem conta. Use Entrar.";
+  if(c==="weak_password"||/at least \d+ char/i.test(m))return"A senha precisa ter pelo menos 6 caracteres.";
+  if(c==="over_email_send_rate_limit"||/email rate limit/i.test(m))return"Limite de e-mails do Supabase atingido. Rode o supabase_setup.sql atualizado (libera contas sem e-mail) e tente Entrar.";
+  if(c==="over_request_rate_limit"||/rate limit/i.test(m)||j.code===429)return"Muitas tentativas. Aguarde um pouco e tente de novo.";
+  if(c==="signup_disabled")return"Novos cadastros estão desativados neste projeto.";
+  if(c==="email_address_invalid"||/invalid.*email/i.test(m))return"E-mail inválido.";
+  return m||"Erro ao autenticar.";
+}
+async function enter(em){
+  const local=DB[em],uid=SES.user.id;
+  let data,needPush=false,ap;
+  try{ap=await approvedState(uid)}
+  catch(e){
+    if(e&&e.table)throw{msg:"O banco ainda não está configurado. Rode o supabase_setup.sql atualizado no SQL Editor do Supabase."};
+    if(e&&e.auth)throw e;
+    ap=apGet(em);
+  }
+  apSet(em,ap);
+  if(!ap){
+    DB[em]=fixUser(local);S.me=em;S.pend=true;S.tab="home";S.form.pw="";S.err="";S.ok="";saveLocal();setSync("ok");return;
+  }
+  S.pend=false;
+  try{
+    const row=await pull(uid);
+    if(row&&row.data&&!(DIRTY[em]&&local)){data=fixUser(row.data);LAST=JSON.stringify(data)}
+    else if(local){data=fixUser(local);needPush=true}
+    else{data=mkUser();needPush=true}
+  }catch(e){
+    if(e&&e.table)throw{msg:"As tabelas ainda não existem no Supabase. Rode o arquivo supabase_setup.sql no SQL Editor."};
+    if(e&&e.auth)throw e;
+    if(local){data=fixUser(local);needPush=true}
+    else throw{msg:"Não foi possível carregar seus dados. Verifique a conexão e tente de novo."};
+  }
+  DB[em]=data;S.me=em;S.tab="home";S.dia=td();S.form.pw="";S.err="";S.ok="";
+  pruneProg();saveLocal();setSync("ok");loadPhotos();
+  if(needPush){LAST="";DIRTY[em]=true;saveDirty();push()}
+}
+async function auth(){
+  if(S.busy)return;
+  const em=S.form.em.trim().toLowerCase(),pw=S.form.pw;
+  S.ok="";
+  if(!/^\S+@\S+\.\S+$/.test(em)){S.err="Digite um e-mail válido";R();return}
+  if(S.aba==="cad"&&pw.length<6){S.err="A senha precisa ter pelo menos 6 caracteres.";R();return}
+  if(!pw){S.err="Digite sua senha.";R();return}
+  S.busy=true;S.err="";R();
+  try{
+    const hd={apikey:SB_KEY,"Content-Type":"application/json"};
+    let r,j;
+    if(S.aba==="cad"){
+      r=await tfetch(SB_URL+"/auth/v1/signup",{method:"POST",headers:hd,body:JSON.stringify({email:em,password:pw})});
+      j=await r.json().catch(()=>({}));
+      if(!r.ok){S.err=amsg(j);return}
+      if(!j.access_token){
+        /* Conta já criada no Supabase Auth. Tenta entrar direto (funciona se a confirmação de e-mail estiver desligada) */
+        const r2=await tfetch(SB_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:hd,body:JSON.stringify({email:em,password:pw})});
+        const j2=await r2.json().catch(()=>({}));
+        if(r2.ok&&j2.access_token)j=j2;
+        else{S.aba="entrar";S.form.pw="";S.ok="Conta criada no Supabase! Se o e-mail de confirmação não chegar, rode o supabase_setup.sql atualizado no SQL Editor (ele confirma as contas) e toque em Entrar.";return}
+      }
+    }else{
+      r=await tfetch(SB_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:hd,body:JSON.stringify({email:em,password:pw})});
+      j=await r.json().catch(()=>({}));
+      if(!r.ok||!j.access_token){S.err=amsg(j);return}
+    }
+    setSes(j);
+    await enter(SES.user.email||em);
+  }catch(e){
+    if(!S.me){SES=null;store.set(SES_KEY,"")}
+    S.err=(e&&e.msg)||"Sem conexão. Verifique sua internet.";
+  }finally{S.busy=false;R()}
+}
+
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-a]");
+  if(!el)return;
+  if(el.classList.contains("ov")&&e.target!==el)return;
+  const a=el.dataset.a,v=el.dataset.v;
+  if(S.me&&!DB[S.me]){S.me=null}
+  switch(a){
+    case"aba":S.aba=v;S.err="";S.ok="";break;
+    case"auth":auth();return;
+    case"net":checkNet();return;
+    case"chkap":boot();return;
+    case"adm":S.adm={step:"pw",pw:"",users:[],err:"",busy:false};break;
+    case"admclose":S.adm=null;break;
+    case"admgo":admLoad();return;
+    case"admref":admLoad();return;
+    case"admset":admSet(el.dataset.v,el.dataset.ok==="1");return;
+    case"sair":doLogout();return;
+    case"tab":S.tab=v;S.det=null;S.clr=false;if(v==="lib"){S.q="";S.g="Todos"}window.scrollTo(0,0);break;
+    case"dia":S.dia=+v;S.clr=false;break;
+    case"criar":{const p=ensure(S.dia);if(S.nome.trim())p.n=S.nome.trim();S.nome="";break}
+    case"up":case"dn":{const L=plan(S.dia).ex,i=+v,j=a==="up"?i-1:i+1;if(L[j])[L[i],L[j]]=[L[j],L[i]];break}
+    case"rm":{const L=plan(S.dia).ex,x=L[+v];if(x)clearProg(S.dia,x.id);L.splice(+v,1);break}
+    case"ser":{
+      const arr=serArr(el.dataset.d,el.dataset.id),n=+el.dataset.n;
+      arr[n]=!arr[n];
+      if(arr[n]){
+        const px=plan(+el.dataset.d),ex=px&&px.ex.find(x=>x.id===el.dataset.id);
+        const seg=ex?(+ex.d||0):0;
+        if(seg>0)startRest(seg);
+      }
+      break}
+    case"clr":if(S.clr){clearProg(S.dia);delete U().plan[S.dia];S.clr=false}else S.clr=true;break;
+    case"gp":S.g=v;break;
+    case"det":S.det=v;S.detDia=S.dia;break;
+    case"fechar":S.det=null;break;
+    case"ddia":S.detDia=+v;break;
+    case"salvar":{const p=ensure(S.detDia);if(p.ex.some(x=>x.id===S.det)){toast("Já está em "+DN[S.detDia])}else{p.ex.push({id:S.det,s:3,r:"10-12",d:60});toast("Salvo em "+DN[S.detDia]+" ✓")}S.det=null;break}
+    case"crg":{const f=S.cf;if(!(+f.min>0)){toast("Informe o tempo em minutos");return}U().cardio.push({t:f.t,min:+f.min,km:+f.km||0,obs:f.obs,date:isoLocal(new Date())});S.cf={t:f.t,min:"",km:"",obs:""};toast("Cardio registrado");break}
+    case"cdel":U().cardio.splice(+v,1);break;
+    case"pular":stopRest();break;
+  }
+  save();R();
+});
+
+function onField(e){
+  const t=e.target,f=t.dataset&&t.dataset.f;if(!f)return;const k=t.dataset.k;
+  if(f==="admpw"){if(S.adm)S.adm.pw=t.value;return}
+  if(f==="em")S.form.em=t.value;
+  else if(f==="pw")S.form.pw=t.value;
+  else if(f==="nome")S.nome=t.value;
+  else if(f==="q"){S.q=t.value;const l=$("#lista");if(l)l.innerHTML=listaBib();return}
+  else if(f==="pn"){const p=plan(S.dia);if(p){p.n=t.value;save()}return}
+  else if(f==="pf"){U().prof[k]=t.value;save();return}
+  else if(f==="ex"){
+    const p=plan(S.dia),x=p&&p.ex[+t.dataset.i];
+    if(x){
+      if(k==="r")x[k]=t.value;
+      else{const n=Math.floor(+t.value);x[k]=Math.min(k==="s"?20:3600,Math.max(k==="s"?1:0,isNaN(n)?(k==="s"?1:0):n))}
+      save();
+      if(e.type==="change"&&k!=="r")R();
+    }
+    return}
+  else if(f==="cf"){S.cf[k]=t.value;return}
+}
+document.addEventListener("input",onField);
+document.addEventListener("change",onField);
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&S.adm){S.adm=null;R();return}
+  if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.f==="admpw"){admLoad();return}
+  if(e.key==="Escape"&&S.det){S.det=null;R()}
+  if(e.key==="Enter"&&e.target.dataset&&(e.target.dataset.f==="em"||e.target.dataset.f==="pw")&&!S.me)auth();
+});
+/* Ao esconder a aba, garante o envio dos dados; ao voltar, atualiza o cronômetro */
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){if(S.me&&SES&&DIRTY[S.me])push(true)}
+  else{paintRest();boot()}
+});
+window.addEventListener("pagehide",()=>{if(S.me&&SES&&DIRTY[S.me])push(true)});
+window.addEventListener("online",()=>{checkNet();if(S.me&&SES&&DIRTY[S.me])push()});
+window.addEventListener("offline",()=>setNet("off","Sem internet. Seus dados ficam salvos no aparelho e sobem quando a conexão voltar."));
+setInterval(()=>{if(S.me&&SES&&DIRTY[S.me]&&!pushing)push()},15000);
+/* Sincronização automática a cada 30 segundos */
+setInterval(()=>{
+  if(document.hidden)return;
+  checkNet();
+  if(S.me&&SES)boot();
+  if(S.adm&&S.adm.step==="list"&&!S.adm.busy)admLoad();
+},30000);
+
+if(S.me)pruneProg();
+R();
+checkNet();
+loadPhotos();
+boot();
+</script>
+</body>
+</html>
